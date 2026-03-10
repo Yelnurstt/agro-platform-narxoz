@@ -1,0 +1,16 @@
+{% extends 'mainapp/base.html' %}
+
+{% block content %}
+<div class="row align-items-center min-vh-50 py-5">
+    <div class="col-lg-6">
+        <h1 class="display-4 fw-bold mb-4" style="color: #2E7D32;">Свежие продукты с фермы на ваш стол</h1>
+        <p class="lead text-muted mb-4">Мы соединяем честных фермеров с теми, кто ценит натуральное качество. Без посредников, только свежесть и польза.</p>
+        <a href="{% url 'product_list' %}" class="btn btn-custom btn-lg">Смотреть каталог</a>
+    </div>
+    <div class="col-lg-6 mt-4 mt-lg-0 text-center">
+        <div class="bg-light rounded p-5 border shadow-sm" style="height: 300px; display: flex; align-items: center; justify-content: center;">
+            <span class="text-muted">🌱 Экологически чистый урожай 2026 года</span>
+        </div>
+    </div>
+</div>
+{% endblock %}

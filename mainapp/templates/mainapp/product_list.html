@@ -1,0 +1,18 @@
+{% extends 'mainapp/base.html' %}
+
+{% block content %}
+<h2 class="fw-bold mb-4 text-center">Каталог продукции</h2>
+<div class="row mt-4">
+    {% for product in products %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 border-0 shadow-sm text-center p-3">
+            <div class="card-body">
+                <h5 class="card-title fw-bold" style="color: #2E7D32;">{{ product.name }}</h5>
+                <p class="card-text text-muted fw-bold">{{ product.price }}</p>
+                <a href="{% url 'product_detail' product.id %}" class="btn btn-outline-success btn-sm mt-3">Подробнее</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

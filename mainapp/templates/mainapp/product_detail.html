@@ -1,0 +1,18 @@
+{% extends 'mainapp/base.html' %}
+
+{% block content %}
+<div class="row justify-content-center py-4">
+    <div class="col-md-8">
+        <div class="card border-0 shadow-sm p-5">
+            <h2 class="fw-bold mb-3" style="color: #2E7D32;">{{ product.name }}</h2>
+            <h4 class="text-muted mb-4">{{ product.price }}</h4>
+            <p class="fs-5 mb-5">{{ product.description }}</p>
+            
+            <div>
+                <a href="{% url 'product_list' %}" class="btn btn-light border me-2">← Назад в каталог</a>
+                <button class="btn btn-custom">Добавить в корзину</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
