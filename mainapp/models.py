@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-# 1. Категории товаров
+# 1 Категории товаров
 class Category(models.Model):
     name = models.CharField(max_length=150, verbose_name="Название категории")
     description = models.TextField(blank=True, verbose_name="Описание")
@@ -9,7 +9,7 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-# 2. Профиль фермера (Связь One-to-One с базовым юзером Django)
+# 2 Профиль фермера Связь One-to-One с базовым юзером Django
 class Farmer(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name="Пользователь")
     farm_name = models.CharField(max_length=200, verbose_name="Название фермы")
@@ -18,14 +18,14 @@ class Farmer(models.Model):
     def __str__(self):
         return self.farm_name
 
-# 3. Теги для товаров
+# 3 Теги товаров
 class Tag(models.Model):
     name = models.CharField(max_length=50, verbose_name="Тег")
 
     def __str__(self):
         return self.name
 
-# 4. Сам товар (Связи: One-to-Many с Category и Farmer, Many-to-Many с Tag)
+# 4 Сам товар One-to-Many с Category и Farmer, Many-to-Many с Tag
 class Product(models.Model):
     name = models.CharField(max_length=200, verbose_name="Название товара")
     description = models.TextField(verbose_name="Описание")
@@ -38,7 +38,7 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
-# 5. Заказ покупателя
+# 5 Заказ покупателя
 class Order(models.Model):
     STATUS_CHOICES = (
         ('pending', 'В ожидании'),
@@ -51,7 +51,7 @@ class Order(models.Model):
     def __str__(self):
         return f"Заказ #{self.id} от {self.customer.username}"
 
-# 6. Элементы заказа (что именно купили и сколько)
+# 6 Элементы заказа
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items", verbose_name="Заказ")
     product = models.ForeignKey(Product, on_delete=models.CASCADE, verbose_name="Товар")
@@ -60,7 +60,7 @@ class OrderItem(models.Model):
     def __str__(self):
         return f"{self.quantity} шт. - {self.product.name}"
 
-# 7. Отзывы на товары
+# 7 Отзывы 
 class Review(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="reviews", verbose_name="Товар")
     author = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Автор")

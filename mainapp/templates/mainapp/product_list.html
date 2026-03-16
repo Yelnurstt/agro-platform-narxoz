@@ -7,11 +7,17 @@
     <div class="col-md-4 mb-4">
         <div class="card h-100 border-0 shadow-sm text-center p-3">
             <div class="card-body">
+                <span class="badge bg-success mb-2">{{ product.category.name }}</span>
                 <h5 class="card-title fw-bold" style="color: #2E7D32;">{{ product.name }}</h5>
-                <p class="card-text text-muted fw-bold">{{ product.price }}</p>
+                <p class="text-muted small mb-2">Ферма: {{ product.farmer.farm_name }}</p>
+                <p class="card-text fw-bold fs-5">{{ product.price }} KZT</p>
                 <a href="{% url 'product_detail' product.id %}" class="btn btn-outline-success btn-sm mt-3">Подробнее</a>
             </div>
         </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center">
+        <p class="text-muted fs-5">Товаров пока нет.</p>
     </div>
     {% endfor %}
 </div>
