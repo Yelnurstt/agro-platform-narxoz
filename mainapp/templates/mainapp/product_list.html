@@ -1,7 +1,9 @@
 {% extends 'mainapp/base.html' %}
 
+{% load i18n %}
+
 {% block content %}
-<h2 class="fw-bold mb-4 text-center">Каталог продукции</h2>
+<h2 class="fw-bold mb-4 text-center">{% trans "Өнімдер каталогы" %}</h2>
 <div class="row mt-4">
     {% for product in products %}
     <div class="col-md-4 mb-4">
@@ -9,15 +11,15 @@
             <div class="card-body">
                 <span class="badge bg-success mb-2">{{ product.category.name }}</span>
                 <h5 class="card-title fw-bold" style="color: #2E7D32;">{{ product.name }}</h5>
-                <p class="text-muted small mb-2">Ферма: {{ product.farmer.farm_name }}</p>
+                <p class="text-muted small mb-2">{% trans "Ферма" %}: {{ product.farmer.farm_name }}</p>
                 <p class="card-text fw-bold fs-5">{{ product.price }} KZT</p>
-                <a href="{% url 'product_detail' product.id %}" class="btn btn-outline-success btn-sm mt-3">Подробнее</a>
+                <a href="{% url 'product_detail' product.id %}" class="btn btn-outline-success btn-sm mt-3">{% trans "Толығырақ" %}</a>
             </div>
         </div>
     </div>
     {% empty %}
     <div class="col-12 text-center">
-        <p class="text-muted fs-5">Товаров пока нет.</p>
+        <p class="text-muted fs-5">{% trans "Әзірге өнімдер жоқ." %}</p>
     </div>
     {% endfor %}
 </div>

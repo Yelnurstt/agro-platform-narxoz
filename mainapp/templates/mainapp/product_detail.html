@@ -12,15 +12,15 @@
             <h4 class="text-muted mb-4">{{ product.price }} KZT</h4>
             
             <div class="bg-light p-3 rounded mb-4">
-                <strong>Производитель:</strong> {{ product.farmer.farm_name }}<br>
-                <strong>Локация:</strong> {{ product.farmer.location }}
+                <strong>Өндіруші:</strong> {{ product.farmer.farm_name }}<br>
+                <strong>Орналасқан жері:</strong> {{ product.farmer.location }}
             </div>
             
             <p class="fs-5 mb-5">{{ product.description }}</p>
             
             <div>
-                <a href="{% url 'product_list' %}" class="btn btn-light border me-2">← Назад в каталог</a>
-                <button class="btn btn-custom">Добавить в корзину</button>
+                <a href="{% url 'product_list' %}" class="btn btn-light border me-2">← Катологқа оралу</a>
+                <button class="btn btn-custom">Себетке қосу</button>
             </div>
         </div>
     </div>
