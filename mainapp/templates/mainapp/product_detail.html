@@ -1,28 +1,58 @@
-{% extends 'mainapp/base.html' %}
-
-{% block content %}
+{% extends 'mainapp/base.html' %} {% block content %}
 <div class="row justify-content-center py-4">
-    <div class="col-md-8">
-        <div class="card border-0 shadow-sm p-5">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h2 class="fw-bold mb-0" style="color: #2E7D32;">{{ product.name }}</h2>
-                <span class="badge bg-success fs-6">{{ product.category.name }}</span>
-            </div>
-            
-            <h4 class="text-muted mb-4">{{ product.price }} KZT</h4>
-            
-            <div class="bg-light p-3 rounded mb-4">
-                <strong>Өндіруші:</strong> {{ product.farmer.farm_name }}<br>
-                <strong>Орналасқан жері:</strong> {{ product.farmer.location }}
-            </div>
-            
-            <p class="fs-5 mb-5">{{ product.description }}</p>
-            
-            <div>
-                <a href="{% url 'product_list' %}" class="btn btn-light border me-2">← Катологқа оралу</a>
-                <button class="btn btn-custom">Себетке қосу</button>
-            </div>
+  <div class="col-md-8">
+    <div class="card border-0 shadow-sm p-5">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="fw-bold mb-0" style="color: #2e7d32">{{ product.name }}</h2>
+        <span class="badge bg-success fs-6">{{ product.category.name }}</span>
+      </div>
+
+      <h4 class="text-muted mb-4">{{ product.price }} KZT</h4>
+
+      <div class="bg-light p-3 rounded mb-4">
+        <strong>Өндіруші:</strong> {{ product.farmer.farm_name }}<br />
+        <strong>Орналасқан жері:</strong> {{ product.farmer.location }}
+      </div>
+
+      <p class="fs-5 mb-5">{{ product.description }}</p>
+
+      <hr />
+      <div class="d-flex justify-content-between align-items-center mt-4">
+        <div>
+          <a href="{% url 'product_list' %}" class="btn btn-light border me-2"
+            >← Катологқа оралу</a
+          >
+          <button class="btn btn-custom">Себетке қосу</button>
         </div>
+
+        <div>
+          <a
+            href="{% url 'product_update' product.id %}"
+            class="btn btn-warning me-2"
+          >
+            Өзгерту</a
+          >
+          <a
+            href="{% url 'product_delete' product.id %}"
+            class="btn btn-outline-danger"
+            >🗑️ Жою</a
+          >
+        </div>
+      </div>
+      <div>
+        {% for tag in product.tags.all %}
+        <span class="badge bg-secondary">{{ tag.name }}</span>
+        {% endfor %}
+      </div>
+      <h4 class="mt-5">Пікірлер (Отзывы)</h4>
+      {% for review in product.reviews.all %}
+      <div class="bg-light p-3 mb-2 rounded">
+        <strong>{{ review.author.username }}</strong>: {{ review.text }}
+      </div>
+      {% empty %}
+      <p>Әзірге пікірлер жоқ.</p>
+      {% endfor %}
     </div>
+  </div>
 </div>
 {% endblock %}
