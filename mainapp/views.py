@@ -10,7 +10,7 @@ def about(request):
     return render(request, 'mainapp/about.html')
 
 def product_list(request):
-    products = Product.objects.select_related('category', 'farmer').all()
+    products = Product.objects.select_related('category', 'farmer').all()  #вывод с бд
     context = {'products': products}
     return render(request, 'mainapp/product_list.html', context)
 

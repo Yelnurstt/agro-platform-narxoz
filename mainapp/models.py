@@ -26,7 +26,6 @@ class Tag(models.Model):
     def __str__(self):
         return self.name
 
-# 4 Сам товар One-to-Many с Category и Farmer, Many-to-Many с Tag
 class Product(models.Model):
     name = models.CharField(max_length=200, verbose_name=_("Название товара"))
     description = models.TextField(verbose_name=_("Описание"))
