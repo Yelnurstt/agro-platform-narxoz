@@ -1,5 +1,4 @@
 {% extends 'mainapp/base.html' %}
-
 {% load i18n %}
 
 {% block content %}
@@ -9,9 +8,21 @@
         <p class="lead text-muted mb-4">{% trans "Біз адал фермерлерді табиғи сапаны бағалайтын адамдармен байланыстырамыз. Делдалсыз - тек балғындық пен пайда." %}</p>
         <a href="{% url 'product_list' %}" class="btn btn-custom btn-lg">{% trans "Каталогты көру" %}</a>
     </div>
-    <div class="col-lg-6 mt-4 mt-lg-0 text-center">
-        <div class="bg-light rounded p-5 border shadow-sm" style="height: 300px; display: flex; align-items: center; justify-content: center;">
-            <span class="text-muted">🌱 {% trans "2026 жылғы экологиялық таза өнім" %}</span>
+
+    <div class="col-lg-6 mt-4 mt-lg-0">
+        <div class="bg-light rounded p-4 border shadow-sm text-center mb-4">
+            <span class="text-muted fs-5">🌱 {% trans "2026 жылғы экологиялық таза өнім" %}</span>
+        </div>
+
+        <div class="bg-white rounded p-4 border shadow-sm text-center">
+            <h4 class="fw-bold" style="color: #2E7D32;">🌤 Алматыдағы ауа райы (Погода)</h4>
+
+            {% if weather %}
+                <h2 class="display-5 mt-3 text-dark">{{ weather.temperature }} °C</h2>
+                <p class="text-muted mb-0">Желдің жылдамдығы (Скорость ветра): <strong>{{ weather.windspeed }} км/сағ</strong></p>
+            {% else %}
+                <p class="text-danger mt-3">Ауа райы туралы мәлімет қолжетімсіз. (Данные недоступны)</p>
+            {% endif %}
         </div>
     </div>
 </div>

@@ -2,50 +2,44 @@
 {% load i18n %}
 
 {% block content %}
-<h2 class="fw-bold mb-4 text-center">{% trans "Өнімдер каталогы" %} <span class="badge bg-warning text-dark fs-6">Loaded via API (JS)</span></h2>
+<h2 class="fw-bold mb-4 text-center">{% trans "Өнімдер каталогы" %}</h2>
 
-<div class="row mt-4" id="products-container">
-    <div class="col-12 text-center" id="loading-spinner">
-        <p class="text-muted fs-5">Жүктелуде... (Загрузка данных через API)</p>
+<div class="row mt-4">
+    {% for product in page_obj %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 border-0 shadow-sm text-center p-3">
+            <div class="card-body">
+                <span class="badge bg-success mb-2">{{ product.category.name }}</span>
+                <h5 class="card-title fw-bold" style="color: #2E7D32;">{{ product.name }}</h5>
+                <p class="text-muted small mb-2">{% trans "Ферма" %}: {{ product.farmer.farm_name }}</p>
+                <p class="card-text fw-bold fs-5">{{ product.price }} KZT</p>
+                <a href="{% url 'product_detail' product.id %}" class="btn btn-outline-success btn-sm mt-3">{% trans "Толығырақ" %}</a>
+            </div>
+        </div>
     </div>
+    {% empty %}
+    <div class="col-12 text-center">
+        <p class="text-muted fs-5">{% trans "Әзірге өнімдер жоқ." %}</p>
+    </div>
+    {% endfor %}
 </div>
 
-<script>
-    // Ждем, пока загрузится весь HTML
-    document.addEventListener('DOMContentLoaded', function() {
-        // Делаем GET-запрос к нашему API
-        fetch('/api/products/')
-            .then(response => response.json()) // Превращаем ответ в JavaScript-объект
-            .then(data => {
-                const container = document.getElementById('products-container');
-                container.innerHTML = ''; // Очищаем надпись "Загрузка..."
+{% if page_obj.has_other_pages %}
+<nav aria-label="Page navigation" class="mt-5">
+    <ul class="pagination justify-content-center">
+        {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page=1">&laquo; Первая</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Назад</a></li>
+        {% endif %}
 
-                if (data.length === 0) {
-                    container.innerHTML = '<div class="col-12 text-center"><p class="text-muted fs-5">{% trans "Әзірге өнімдер жоқ." %}</p></div>';
-                    return;
-                }
+        <li class="page-item disabled"><span class="page-link">Страница {{ page_obj.number }} из {{ page_obj.paginator.num_pages }}</span></li>
 
-                // Перебираем каждый товар из базы и создаем для него карточку
-                data.forEach(product => {
-                    const card = `
-                        <div class="col-md-4 mb-4">
-                            <div class="card h-100 border-0 shadow-sm text-center p-3">
-                                <div class="card-body">
-                                    <h5 class="card-title fw-bold" style="color: #2E7D32;">${product.name}</h5>
-                                    <p class="text-muted small mb-2">${product.description}</p>
-                                    <p class="card-text fw-bold fs-5">${product.price} KZT</p>
-                                    <a href="/products_html/${product.id}/" class="btn btn-outline-success btn-sm mt-3">{% trans "Толығырақ" %}</a>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                    container.innerHTML += card;
-                });
-            })
-            .catch(error => {
-                console.error('Ошибка при получении данных:', error);
-                document.getElementById('products-container').innerHTML = '<p class="text-danger text-center">Қате шықты! API-мен байланыс жоқ.</p>';
-            });
-    });
-</script>
+        {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Вперед</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Последняя &raquo;</a></li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+
 {% endblock %}

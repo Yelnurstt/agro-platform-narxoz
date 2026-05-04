@@ -25,4 +25,8 @@ urlpatterns = [
 
     # Маршрут APIView
     path('api/custom-products/', views.ProductCustomAPIView.as_view(), name='custom_products_api'),
+    # маршрут log and out
+    path('register/', views.register, name='register'),
+    path('login/', views.UserLoginView.as_view(), name='login'),
+    path('logout/', views.UserLogoutView.as_view(), name='logout'),
 ]
