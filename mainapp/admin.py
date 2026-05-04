@@ -10,16 +10,12 @@ admin.site.register(Review)
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    # Displaying the table with attributes (какие колонки показывать в списке)
     list_display = ('name', 'price', 'category', 'farmer', 'created_at')
     
-    # Adding list filters (панель фильтрации справа)
     list_filter = ('category', 'farmer', 'created_at')
     
-    # Adding search functionality (строка поиска по названию и описанию)
     search_fields = ('name', 'description')
     
-    # Adding sorting attribute (сортировка по умолчанию - по дате добавления по убыванию)
     ordering = ('-created_at',)
 
 @admin.register(Order)

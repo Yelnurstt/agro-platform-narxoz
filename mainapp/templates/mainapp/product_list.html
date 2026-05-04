@@ -1,26 +1,51 @@
 {% extends 'mainapp/base.html' %}
-
 {% load i18n %}
 
 {% block content %}
-<h2 class="fw-bold mb-4 text-center">{% trans "Өнімдер каталогы" %}</h2>
-<div class="row mt-4">
-    {% for product in products %}
-    <div class="col-md-4 mb-4">
-        <div class="card h-100 border-0 shadow-sm text-center p-3">
-            <div class="card-body">
-                <span class="badge bg-success mb-2">{{ product.category.name }}</span>
-                <h5 class="card-title fw-bold" style="color: #2E7D32;">{{ product.name }}</h5>
-                <p class="text-muted small mb-2">{% trans "Ферма" %}: {{ product.farmer.farm_name }}</p>
-                <p class="card-text fw-bold fs-5">{{ product.price }} KZT</p>
-                <a href="{% url 'product_detail' product.id %}" class="btn btn-outline-success btn-sm mt-3">{% trans "Толығырақ" %}</a>
-            </div>
-        </div>
+<h2 class="fw-bold mb-4 text-center">{% trans "Өнімдер каталогы" %} <span class="badge bg-warning text-dark fs-6">Loaded via API (JS)</span></h2>
+
+<div class="row mt-4" id="products-container">
+    <div class="col-12 text-center" id="loading-spinner">
+        <p class="text-muted fs-5">Жүктелуде... (Загрузка данных через API)</p>
     </div>
-    {% empty %}
-    <div class="col-12 text-center">
-        <p class="text-muted fs-5">{% trans "Әзірге өнімдер жоқ." %}</p>
-    </div>
-    {% endfor %}
 </div>
+
+<script>
+    // Ждем, пока загрузится весь HTML
+    document.addEventListener('DOMContentLoaded', function() {
+        // Делаем GET-запрос к нашему API
+        fetch('/api/products/')
+            .then(response => response.json()) // Превращаем ответ в JavaScript-объект
+            .then(data => {
+                const container = document.getElementById('products-container');
+                container.innerHTML = ''; // Очищаем надпись "Загрузка..."
+
+                if (data.length === 0) {
+                    container.innerHTML = '<div class="col-12 text-center"><p class="text-muted fs-5">{% trans "Әзірге өнімдер жоқ." %}</p></div>';
+                    return;
+                }
+
+                // Перебираем каждый товар из базы и создаем для него карточку
+                data.forEach(product => {
+                    const card = `
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100 border-0 shadow-sm text-center p-3">
+                                <div class="card-body">
+                                    <h5 class="card-title fw-bold" style="color: #2E7D32;">${product.name}</h5>
+                                    <p class="text-muted small mb-2">${product.description}</p>
+                                    <p class="card-text fw-bold fs-5">${product.price} KZT</p>
+                                    <a href="/products_html/${product.id}/" class="btn btn-outline-success btn-sm mt-3">{% trans "Толығырақ" %}</a>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    container.innerHTML += card;
+                });
+            })
+            .catch(error => {
+                console.error('Ошибка при получении данных:', error);
+                document.getElementById('products-container').innerHTML = '<p class="text-danger text-center">Қате шықты! API-мен байланыс жоқ.</p>';
+            });
+    });
+</script>
 {% endblock %}

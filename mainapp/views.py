@@ -1,7 +1,15 @@
 from django.shortcuts import render, get_object_or_404
-from django.urls import reverse_lazy
-from django.views.generic import CreateView, UpdateView, DeleteView
-from .models import Category, Product, Review
+from rest_framework import viewsets
+from .models import Category, Farmer, Tag, Product, Order, OrderItem, Review
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+
+from .serializers import (
+    CategorySerializer, FarmerSerializer, TagSerializer,
+    ProductSerializer, OrderSerializer, OrderItemSerializer, ReviewSerializer
+)
+
 
 def home(request):
     return render(request, 'mainapp/home.html')
@@ -24,58 +32,46 @@ def contact(request):
 
 
 
+# API
 
+class CategoryViewSet(viewsets.ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
 
-# CRUD для Product
-class ProductCreate(CreateView):
-    model = Product
-    fields = '__all__' 
-    template_name = 'mainapp/generic_form.html'
-    success_url = reverse_lazy('product_list') 
+class FarmerViewSet(viewsets.ModelViewSet):
+    queryset = Farmer.objects.all()
+    serializer_class = FarmerSerializer
 
-class ProductUpdate(UpdateView):
-    model = Product
-    fields = '__all__'
-    template_name = 'mainapp/generic_form.html'
-    success_url = reverse_lazy('product_list')
+class TagViewSet(viewsets.ModelViewSet):
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
 
-class ProductDelete(DeleteView):
-    model = Product
-    template_name = 'mainapp/generic_confirm_delete.html'
-    success_url = reverse_lazy('product_list')
+class ProductViewSet(viewsets.ModelViewSet):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
 
-#CRUD для Category 
-class CategoryCreate(CreateView):
-    model = Category
-    fields = '__all__'
-    template_name = 'mainapp/generic_form.html'
-    success_url = reverse_lazy('product_list')
+class OrderViewSet(viewsets.ModelViewSet):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
 
-class CategoryUpdate(UpdateView):
-    model = Category
-    fields = '__all__'
-    template_name = 'mainapp/generic_form.html'
-    success_url = reverse_lazy('product_list')
+class OrderItemViewSet(viewsets.ModelViewSet):
+    queryset = OrderItem.objects.all()
+    serializer_class = OrderItemSerializer
 
-class CategoryDelete(DeleteView):
-    model = Category
-    template_name = 'mainapp/generic_confirm_delete.html'
-    success_url = reverse_lazy('product_list')
+class ReviewViewSet(viewsets.ModelViewSet):
+    queryset = Review.objects.all()
+    serializer_class = ReviewSerializer
 
-#CRUD дя Review
-class ReviewCreate(CreateView):
-    model = Review
-    fields = ['product', 'author', 'text']
-    template_name = 'mainapp/generic_form.html'
-    success_url = reverse_lazy('product_list')
+#APIView
+class ProductCustomAPIView(APIView):
+    def get(self, request):
+        products = Product.objects.all()
+        serializer = ProductSerializer(products, many=True)
+        return Response(serializer.data)
 
-class ReviewUpdate(UpdateView):
-    model = Review
-    fields = ['text']
-    template_name = 'mainapp/generic_form.html'
-    success_url = reverse_lazy('product_list')
-
-class ReviewDelete(DeleteView):
-    model = Review
-    template_name = 'mainapp/generic_confirm_delete.html'
-    success_url = reverse_lazy('product_list')
+    def post(self, request):
+        serializer = ProductSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
