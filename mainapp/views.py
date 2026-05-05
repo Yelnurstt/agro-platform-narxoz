@@ -17,7 +17,7 @@ from .serializers import (
 
 
 def home(request):
-    # --- TASK 4: Получение данных из внешнего API (Погода в Алматы) ---
+    #APIПогода
     weather_data = None
     try:
         url = "https://api.open-meteo.com/v1/forecast?latitude=43.2567&longitude=76.9286&current_weather=true"
@@ -45,7 +45,7 @@ def about(request):
 def product_list(request):
     products_all = Product.objects.select_related('category', 'farmer').all().order_by('-created_at')
 
-    # --- TASK 3: Пагинация ---
+    # Пагинация
     paginator = Paginator(products_all, 6)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -64,9 +64,7 @@ def contact(request):
     return render(request, 'mainapp/contact.html')
 
 
-# ==========================================
-# REST API (Django REST Framework)
-# ==========================================
+# REST API
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
@@ -118,9 +116,7 @@ class ProductCustomAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# ==========================================
 # TASK 1: Регистрация и Авторизация
-# ==========================================
 
 # функция реги
 def register(request):
@@ -128,7 +124,7 @@ def register(request):
         form = UserRegisterForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)  # Автоматический вход после регистрации
+            login(request, user)
             return redirect('home')
     else:
         form = UserRegisterForm()
